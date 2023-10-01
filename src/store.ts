@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { menuReducer } from "./slice/menu";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { toolboxReducer } from "./slice/toolbox";
 
 export const store = configureStore({
   reducer: {
     menu: menuReducer,
+    toolbox: toolboxReducer,
   },
 });
 

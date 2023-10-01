@@ -1,6 +1,12 @@
 import { useEffect, useRef } from "react";
+import { useAppSelector } from "../../store";
+import cx from "classnames";
 
 const Board = () => {
+  const activeMenuItem = useAppSelector((state) => state.menu.activeMenuItem);
+  const { color, size } = useAppSelector(
+    (state) => state.toolbox[activeMenuItem]
+  );
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
