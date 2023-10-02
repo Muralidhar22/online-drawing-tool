@@ -8,10 +8,10 @@ import cx from "classnames";
 const Toolbox = () => {
   const dispatch = useAppDispatch();
   const activeMenuItem = useAppSelector((state) => state.menu.activeMenuItem);
-  const showStrokeToolOption = activeMenuItem === MENU_ITEMS.PENCIL;
-  const showBrushToolOption =
-    activeMenuItem === MENU_ITEMS.PENCIL ||
-    activeMenuItem === MENU_ITEMS.ERASER;
+  const isActiveMenuItemPencil = activeMenuItem === MENU_ITEMS.PENCIL;
+  const isActiveMenuItemEraser = activeMenuItem === MENU_ITEMS.ERASER;
+  const showStrokeToolOption = isActiveMenuItemPencil;
+  const showBrushToolOption = isActiveMenuItemPencil || isActiveMenuItemEraser;
   const { color, size } = useAppSelector(
     (state) => state.toolbox[activeMenuItem]
   );
@@ -87,7 +87,9 @@ const Toolbox = () => {
       )}
       {showBrushToolOption && (
         <div className={styles.toolItem}>
-          <h4 className={styles.toolText}>Brush Size</h4>
+          <h4 className={styles.toolText}>
+            {isActiveMenuItemPencil ? "Brush" : "Eraser"} Size
+          </h4>
           <div className={styles.itemContainer}>
             <input
               type="range"

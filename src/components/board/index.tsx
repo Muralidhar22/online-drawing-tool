@@ -1,9 +1,13 @@
 import { useEffect, useRef } from "react";
-import { useAppSelector } from "../../store";
-import cx from "classnames";
+import { useAppDispatch, useAppSelector } from "../../store";
+import { MENU_ITEMS } from "../../constants";
+import { menuActions } from "../../slice/menu";
 
 const Board = () => {
-  const activeMenuItem = useAppSelector((state) => state.menu.activeMenuItem);
+  const dispatch = useAppDispatch();
+  const { activeMenuItem, actionMenuItem } = useAppSelector(
+    (state) => state.menu
+  );
   const { color, size } = useAppSelector(
     (state) => state.toolbox[activeMenuItem]
   );
@@ -65,7 +69,20 @@ const Board = () => {
       };
       changeConfig();
     }
-  }, [color, size]);
+  }, [color, size, canvasRef.current]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    if (actionMenuItem === MENU_ITEMS.DOWNLOAD) {
+      const URL = canvas.toDataURL("image/png");
+      const anchor = document.createElement("a");
+      anchor.href = URL;
+      anchor.download = "sketch.png";
+      anchor.click();
+    }
+    dispatch(menuActions.actionItemClick(null));
+  }, [actionMenuItem, canvasRef.current, dispatch]);
 
   return <canvas ref={canvasRef}></canvas>;
 };
