@@ -12,7 +12,9 @@ const Toolbox = () => {
   const showBrushToolOption =
     activeMenuItem === MENU_ITEMS.PENCIL ||
     activeMenuItem === MENU_ITEMS.ERASER;
-  const { color } = useAppSelector((state) => state.toolbox[activeMenuItem]);
+  const { color, size } = useAppSelector(
+    (state) => state.toolbox[activeMenuItem]
+  );
 
   const updateBrushSize = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch(
@@ -93,6 +95,7 @@ const Toolbox = () => {
               max={10}
               step={1}
               onChange={updateBrushSize}
+              value={size}
             />
           </div>
         </div>
