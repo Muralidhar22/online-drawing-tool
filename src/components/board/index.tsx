@@ -13,7 +13,7 @@ const Board = () => {
   );
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const shouldDraw = useRef<boolean | null>(null);
-  const drawHistory = useRef([]);
+  const drawHistory = useRef<ImageData[]>([]);
   const historyPointer = useRef(0);
 
   useEffect(() => {
@@ -35,17 +35,17 @@ const Board = () => {
       context?.stroke();
     };
 
-    const handleMouseDown = (e) => {
+    const handleMouseDown = (e: MouseEvent) => {
       shouldDraw.current = true;
       beginPath(e.clientX, e.clientY);
     };
 
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: MouseEvent) => {
       if (!shouldDraw.current) return;
       drawLine(e.clientX, e.clientY);
     };
 
-    const handleMouseUp = (e) => {
+    const handleMouseUp = () => {
       shouldDraw.current = false;
       if (context) {
         const imageData = context.getImageData(
