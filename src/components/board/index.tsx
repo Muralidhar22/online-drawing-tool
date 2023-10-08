@@ -12,7 +12,7 @@ const Board = () => {
     (state) => state.toolbox[activeMenuItem]
   );
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const shouldDraw = useRef(null);
+  const shouldDraw = useRef<boolean | null>(null);
   const drawHistory = useRef([]);
   const historyPointer = useRef(0);
 
@@ -25,12 +25,12 @@ const Board = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const beginPath = (x, y) => {
+    const beginPath = (x: number, y: number) => {
       context?.beginPath();
       context?.moveTo(x, y);
     };
 
-    const drawLine = (x, y) => {
+    const drawLine = (x: number, y: number) => {
       context?.lineTo(x, y);
       context?.stroke();
     };
@@ -71,22 +71,24 @@ const Board = () => {
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    else if (canvasRef.current !== null) {
-      const canvas = canvasRef.current;
-      const context = canvas.getContext("2d");
 
-      const changeConfig = () => {
+    const canvas = canvasRef.current;
+    const context = canvas.getContext("2d");
+
+    const changeConfig = () => {
+      if (!context) return null;
+      if (context instanceof CanvasRenderingContext2D && color && size) {
         context.strokeStyle = color;
         context.lineWidth = size;
-      };
-      changeConfig();
-    }
+      }
+    };
+    changeConfig();
   }, [color, size, canvasRef.current]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext("2d");
-    if (!canvas) return;
+    if (!canvas || !context) return;
     if (actionMenuItem === MENU_ITEMS.DOWNLOAD) {
       const URL = canvas.toDataURL("image/png");
       const anchor = document.createElement("a");
